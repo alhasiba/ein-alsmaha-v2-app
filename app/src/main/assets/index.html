@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عين السماحة</title>
+<style>
+  :root {
+    --bg: #101820; --card: #1b2a36; --text: #f2f5f7; --accent: #2ec4b6; --muted: #8fa3b0;
+    --bg-image: none;
+  }
+  body.theme-light { --bg: #eef3f6; --card: #ffffff; --text: #1d2b36; --accent: #0a7f8c; --muted: #5b6f7c; }
+  body.theme-amber { --bg: #1f1708; --card: #2e2310; --text: #fff6e0; --accent: #f5a623; --muted: #b8a37a; }
+  body.theme-red   { --bg: #1a0b0e; --card: #2a1418; --text: #fdeef0; --accent: #e63946; --muted: #b58a90; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: system-ui, "Segoe UI", Tahoma, sans-serif;
+    background: var(--bg-image) center/cover no-repeat, var(--bg);
+    color: var(--text);
+    display: flex; flex-direction: column;
+  }
+  header {
+    padding: 14px 18px; background: var(--card);
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid var(--accent);
+  }
+  header h1 { margin: 0; font-size: 20px; }
+  header small { color: var(--muted); }
+  nav { display: flex; gap: 8px; padding: 10px 14px; overflow-x: auto; }
+  nav button, .theme-btn, .action {
+    border: 0; border-radius: 10px; padding: 10px 14px; font-size: 15px;
+    background: var(--card); color: var(--text); cursor: pointer; white-space: nowrap;
+  }
+  nav button.active { background: var(--accent); color: #fff; }
+  main { flex: 1; overflow-y: auto; padding: 12px 14px 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .app-card {
+    background: var(--card); border-radius: 14px; padding: 14px; text-align: center;
+  }
+  .app-icon {
+    width: 56px; height: 56px; margin: 0 auto 8px; border-radius: 14px;
+    background: var(--accent); color: #fff; font-size: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .app-card p { margin: 4px 0 10px; font-size: 14px; }
+  .panel { background: var(--card); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+  .panel h2 { margin: 0 0 10px; font-size: 17px; color: var(--accent); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .muted { color: var(--muted); font-size: 14px; }
+  input[type=text] {
+    width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--muted);
+    background: var(--bg); color: var(--text); font-size: 15px; margin-top: 8px;
+  }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>عين السماحة</h1>
+    <small>شاشات السيارات والداش كام</small>
+  </div>
+  <div class="row">
+    <button class="theme-btn" onclick="setTheme('dark')">داكن</button>
+    <button class="theme-btn" onclick="setTheme('light')">فاتح</button>
+    <button class="theme-btn" onclick="setTheme('amber')">ذهبي</button>
+    <button class="theme-btn" onclick="setTheme('red')">أحمر</button>
+  </div>
+</header>
+
+<nav>
+  <button data-tab="apps" class="active" onclick="showTab('apps', this)">التطبيقات</button>
+  <button data-tab="bg" onclick="showTab('bg', this)">الخلفية</button>
+  <button data-tab="service" onclick="showTab('service', this)">الصيانة والبرمجة</button>
+  <button data-tab="contact" onclick="showTab('contact', this)">تواصل معنا</button>
+</nav>
+
+<main>
+  <section id="tab-apps">
+    <div class="grid" id="apps-grid"></div>
+  </section>
+
+  <section id="tab-bg" class="hidden">
+    <div class="panel">
+      <h2>خلفية الشاشة</h2>
+      <p class="muted">اختر خلفية لواجهة التطبيق. ملاحظة: هذي تغيّر خلفية التطبيق نفسه، وليست خلفية نظام السيارة.</p>
+      <div class="row">
+        <button class="action" onclick="setBg('none')">بدون خلفية</button>
+        <button class="action" onclick="setBg('grad1')">تدرج أزرق</button>
+        <button class="action" onclick="setBg('grad2')">تدرج ذهبي</button>
+      </div>
+      <input type="text" id="bg-url" placeholder="أو الصق رابط صورة (https://...)">
+      <div class="row" style="margin-top:8px"><button class="action" onclick="setBgUrl()">تطبيق الصورة</button></div>
+    </div>
+  </section>
+
+  <section id="tab-service" class="hidden">
+    <div class="panel">
+      <h2>الصيانة</h2>
+      <p class="muted">صيانة شاشات الأندرويد وإصلاح الأعطال.</p>
+    </div>
+    <div class="panel">
+      <h2>البرمجة</h2>
+      <p class="muted">برمجة الشاشات وتركيب التطبيقات وتحديث النظام.</p>
+    </div>
+  </section>
+
+  <section id="tab-contact" class="hidden">
+    <div class="panel">
+      <h2>تواصل معنا</h2>
+      <p>للحصول على كود الوصول أو الاستفسار:</p>
+      <p><b>0576680374</b></p>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Sample catalog. Replace/extend with your real apps.
+  const APPS = [
+    { name: "مشغل الفيديو", icon: "▶", desc: "تشغيل الفيديوهات على الشاشة" },
+    { name: "الخرائط", icon: "⌖", desc: "ملاحة وخرائط للسيارة" },
+    { name: "الكاميرا الخلفية", icon: "◉", desc: "عرض كاميرا الرجوع" },
+    { name: "الموسيقى", icon: "♪", desc: "مشغل موسيقى" }
+  ];
+
+  const grid = document.getElementById("apps-grid");
+  APPS.forEach(a => {
+    const d = document.createElement("div");
+    d.className = "app-card";
+    d.innerHTML = `<div class="app-icon">${a.icon}</div><b>${a.name}</b><p class="muted">${a.desc}</p>`;
+    grid.appendChild(d);
+  });
+
+  function setTheme(t) {
+    document.body.className = t === "dark" ? "" : "theme-" + t;
+    try { localStorage.setItem("theme", t); } catch (e) {}
+  }
+
+  const BGS = {
+    none: "none",
+    grad1: "linear-gradient(160deg, #0d2b45, #203a43 60%, #2c5364)",
+    grad2: "linear-gradient(160deg, #3a2a00, #7a5a10 60%, #b8860b)"
+  };
+  function applyBg(value) {
+    document.documentElement.style.setProperty("--bg-image", value);
+    try { localStorage.setItem("bg", value); } catch (e) {}
+  }
+  function setBg(key) { applyBg(BGS[key]); }
+  function setBgUrl() {
+    const url = document.getElementById("bg-url").value.trim();
+    if (/^https?:\/\//.test(url)) applyBg(`url("${url}")`);
+  }
+
+  function showTab(name, btn) {
+    ["apps", "bg", "service", "contact"].forEach(t =>
+      document.getElementById("tab-" + t).classList.toggle("hidden", t !== name));
+    document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b === btn));
+  }
+
+  // Restore saved preferences
+  try {
+    const t = localStorage.getItem("theme"); if (t) setTheme(t);
+    const bg = localStorage.getItem("bg"); if (bg) document.documentElement.style.setProperty("--bg-image", bg);
+  } catch (e) {}
+</script>
+</body>
+</html>
